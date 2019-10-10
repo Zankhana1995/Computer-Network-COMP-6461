@@ -15,8 +15,6 @@ Command to RUN :
 
 1) For GET request ====>> 
 
-    httpc get -h http://localhost/get?course=networking&assignment=1
-
     httpc get -v http://localhost/get?course=networking&assignment=1
 
     httpc get -h Content-Type:application/json http://localhost/get?course=networking&assignment=1
@@ -27,6 +25,8 @@ Command to RUN :
 
     httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost/post
 
+   httpc post -v -d '{"Assignment":1}' http://localhost/post
+	
     httpc post -v -h Content-Type:application/json -d '{"Assignment":1}' http://localhost/post
 
     httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost/post?course=networking&assignment=1
@@ -34,6 +34,8 @@ Command to RUN :
     httpc post -v -h Content-Type:application/json -d '{"Assignment":1}' http://localhost/post?course=networking&assignment=1
 
     httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost/post?course=networking&assignment=1 -o result.txt
+    
+   httpc post -v -f zkp.txt http://localhost/post?course=networking&assignment=1
 
 3) GET request with REDIRECTION CODE (numbers starts with 3xx) ====>>
 

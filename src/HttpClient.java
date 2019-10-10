@@ -1,7 +1,9 @@
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -55,6 +57,7 @@ public class HttpClient {
 				fileData = new StringBuilder();
 
 				//checking for redirection
+				
 				if (request.isRedirect() && count <= 3) {
 					count++;
 
@@ -62,7 +65,9 @@ public class HttpClient {
 							HTTPC + " " + request.getRequestMethod() + " -v " + request.getRedirectLocation());
 					request.setRedirect(false);
 
-				} else {
+				} 
+				
+				else {
 					count = 0;
 					request = new HttpClientRequest();
 					System.out.print("Please Enter command ==> ");
@@ -82,12 +87,12 @@ public class HttpClient {
 
 					if (dataList.contains("post")) {
 						System.out.println(
-								"usage: httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL\\nPost executes a HTTP ");
+								"usage: httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL\nPost executes a HTTP ");
 					} else if (dataList.contains("get")) {
 						System.out
-								.println("usage: httpc get [-v] [-h key:value] URL\\nGet executes a HTTP GET request ");
+								.println("usage: httpc get [-v] [-h key:value] URL\nGet executes a HTTP GET request ");
 					} else {
-						System.out.println("httpc is a curl-like application but supports HTTP protocol only.\n");
+						System.out.println("httpc is a curl-like application but supports HTTP protocol only.");
 					}
 				}
 
@@ -150,7 +155,6 @@ public class HttpClient {
 							continue;
 						}
 					}
-
 					if (responseReader != null) {
 						responseReader.close();
 					}
@@ -161,6 +165,7 @@ public class HttpClient {
 				}
 
 			} catch (Exception e) {
+			//	e.printStackTrace();
 				System.out.println("Invalid URL please. Provide valid httpc get or httpc post URL");
 				continue;
 			}
@@ -335,15 +340,27 @@ public class HttpClient {
 		// -f for sending file data	
 		} else if (request.isFilesend()) {
 
-			File filetoSend = new File(request.getFileSendPath());
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(filetoSend));
-			String string;
-			while ((string = bufferedReader.readLine()) != null) {
-				fileData.append(string);
-			}
-			writer.println("Content-Length: " + fileData.length() + NEW_LINE);
+//			File filetoSend = new File(request.getFileSendPath());
+//			BufferedReader bufferedReader = new BufferedReader(new FileReader(filetoSend));
+//			String string;
+//			while ((string = bufferedReader.readLine()) != null) {
+//				fileData.append(string);
+//			}
+//			writer.println("Content-Length: " + fileData.length() + NEW_LINE);
+//
+//			bufferedReader.close();
+			
+			byte[] bytearray = new byte[1024*16];
+		    FileInputStream fis = new FileInputStream(request.getFileSendPath());
+		        //OutputStream output= socket.getOututStream();
+		        BufferedInputStream bis = new BufferedInputStream(fis);
 
-			bufferedReader.close();
+		        int readLength = -1;
+		        while ((readLength = bis.read(bytearray)) > 0) {
+		            output.write(bytearray, 0, readLength);
+
+		        }
+		        bis.close();
 
 		}
 
@@ -362,7 +379,7 @@ public class HttpClient {
 			writer.print(NEW_LINE);
 			writer.print(request.getInlineData());
 		} else if (request.isFilesend()) {
-			writer.print(fileData);
+		//	writer.print(fileData);
 			writer.print(NEW_LINE);
 		} else {
 			writer.print(NEW_LINE);
