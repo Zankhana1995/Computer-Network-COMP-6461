@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -244,14 +245,22 @@ public class HttpClient {
 
 			boolean isJson = false;
 			while ((line = reader.readLine()) != null) {
-
-				if (line.trim().equals(LEFT_BRACKET))
+				
+//				if (line.trim().equals(LEFT_BRACKET))
+//					isJson = true;
+//				if (isJson) {
+//					System.out.println(line);
+//					if (line.equals(RIGHT_BRACKET))
+//						break;
+//				}
+				
+				if(line.startsWith("Content-Length:")) {
 					isJson = true;
-				if (isJson) {
-					System.out.println(line);
-					if (line.equals(RIGHT_BRACKET))
-						break;
 				}
+				if(isJson && !line.startsWith("Content-Length:")) {
+					System.out.println(line);
+				}
+				
 			}
 
 		}
@@ -340,30 +349,33 @@ public class HttpClient {
 		// -f for sending file data	
 		} else if (request.isFilesend()) {
 
-//			File filetoSend = new File(request.getFileSendPath());
-//			BufferedReader bufferedReader = new BufferedReader(new FileReader(filetoSend));
-//			String string;
-//			while ((string = bufferedReader.readLine()) != null) {
-//				fileData.append(string);
-//			}
-//			writer.println("Content-Length: " + fileData.length() + NEW_LINE);
-//
-//			bufferedReader.close();
-			
+			// File filetoSend = new File(request.getFileSendPath());
+			// BufferedReader bufferedReader = new BufferedReader(new FileReader(filetoSend));
+			// String string;
+			// while ((string = bufferedReader.readLine()) != null) {
+			// fileData.append(string);
+			// }
+			// writer.println("Content-Length: " + fileData.length() + NEW_LINE);
+
+			// bufferedReader.close();
+
+
 			byte[] bytearray = new byte[1024*16];
-		    FileInputStream fis = new FileInputStream(request.getFileSendPath());
-		        //OutputStream output= socket.getOututStream();
-		        BufferedInputStream bis = new BufferedInputStream(fis);
+			    InputStream in = HttpClient.class.getResourceAsStream(request.getFileSendPath());
+			   
+			        BufferedInputStream bis = new BufferedInputStream(in);
 
-		        int readLength = -1;
-		        while ((readLength = bis.read(bytearray)) > 0) {
-		            output.write(bytearray, 0, readLength);
+			        int readLength = -1;
+			        while ((readLength = bis.read(bytearray)) > 0) {
+			            output.write(bytearray, 0, readLength);
 
-		        }
-		        bis.close();
+			        }
+			        bis.close();
+			        //output.close();
 
-		}
 
+
+			}
 		// -h for http header
 		if (request.isHttpHeader()) {
 			if (!headerLst.isEmpty()) {

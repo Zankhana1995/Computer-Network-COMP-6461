@@ -35,7 +35,7 @@ Command to RUN :
 
     httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost/post?course=networking&assignment=1 -o result.txt
     
-   httpc post -v -f zkp.txt http://localhost/post?course=networking&assignment=1
+   httpc post -v -f file.json http://localhost/post?course=networking&assignment=1
 
 3) GET request with REDIRECTION CODE (numbers starts with 3xx) ====>>
 

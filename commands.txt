@@ -1,0 +1,12 @@
+httpc get http://localhost/status/418
+httpc get -v -h xyz:ab-c http://localhost/get?NAME=PazimGoyal
+httpc get -h abc:cde -d '{Lab:903}' -v -f file.json http://localhost/post
+
+httpc post -d userName=PAZIM_GOYAL -v http://localhost/post
+httpc post -h Content-Type:application/json -h Keep-Alive:10 -v -f file.json http://localhost/post
+httpc post -d '{Lab:903}' -v -f file.json http://localhost/post
+httpc help get
+
+Bonus:
+httpc get -v -h Content-Type:text/html -h Keep-Alive:10 -h Accept-language:en http://localhost/redirect/7
+httpc get -v -h Content-Type:text/html -h abc:def -h Accept-language:en http://localhost/redirect/4 -o temp.txt
