@@ -1,13 +1,9 @@
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -22,7 +18,7 @@ import java.util.Scanner;
 
 /**
  * This class is the entry point of HTTP Client Library Implementation.
- * 
+ *
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  */
 public class HttpClient {
@@ -40,10 +36,10 @@ public class HttpClient {
 
 	private static Socket clientSocket = null;
 
-	
 	/**
-	 * This method id the entry point and when user run this class in console used need to provide valid request URL
-	 * 
+	 * This method id the entry point and when user run this class in console used
+	 * need to provide valid request URL
+	 *
 	 * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
 	 */
 	public static void main(String[] args) throws Exception {
@@ -57,8 +53,7 @@ public class HttpClient {
 				headerLst = new ArrayList<String>();
 				fileData = new StringBuilder();
 
-				//checking for redirection
-				
+				// checking for redirection
 				if (request.isRedirect() && count <= 3) {
 					count++;
 
@@ -66,9 +61,7 @@ public class HttpClient {
 							HTTPC + " " + request.getRequestMethod() + " -v " + request.getRedirectLocation());
 					request.setRedirect(false);
 
-				} 
-				
-				else {
+				} else {
 					count = 0;
 					request = new HttpClientRequest();
 					System.out.print("Please Enter command ==> ");
@@ -88,16 +81,16 @@ public class HttpClient {
 
 					if (dataList.contains("post")) {
 						System.out.println(
-								"usage: httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL\nPost executes a HTTP ");
+								"usage: httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL\\nPost executes a HTTP ");
 					} else if (dataList.contains("get")) {
 						System.out
-								.println("usage: httpc get [-v] [-h key:value] URL\nGet executes a HTTP GET request ");
+								.println("usage: httpc get [-v] [-h key:value] URL\\nGet executes a HTTP GET request ");
 					} else {
-						System.out.println("httpc is a curl-like application but supports HTTP protocol only.");
+						System.out.println("httpc is a curl-like application but supports HTTP protocol only.\n");
 					}
 				}
 
-				//validation start
+				// validation start
 				if (dataList.get(0).contains("httpc")
 						&& (dataList.get(1).contains("get") || dataList.get(1).contains("post"))) {
 
@@ -121,7 +114,7 @@ public class HttpClient {
 					String t;
 					String statusCode = responseReader.readLine();
 
-					//validate if redirection or not
+					// validate if redirection or not
 					String[] strArr = statusCode.split(" ");
 					if (strArr[1].contains("3")) {
 						request.setRedirect(true);
@@ -137,10 +130,10 @@ public class HttpClient {
 						}
 
 					}
-					
+
 					if (request.isFileWrite()) {
 
-						//Method call for write response in file
+						// Method call for write response in file
 						writetoFile(responseReader, statusCode);
 
 						if (request.isRedirect()) {
@@ -149,13 +142,14 @@ public class HttpClient {
 
 					} else {
 
-						//Method call for printing response in console
+						// Method call for printing response in console
 						printresult(responseReader, statusCode);
 
 						if (request.isRedirect()) {
 							continue;
 						}
 					}
+
 					if (responseReader != null) {
 						responseReader.close();
 					}
@@ -166,7 +160,6 @@ public class HttpClient {
 				}
 
 			} catch (Exception e) {
-			//	e.printStackTrace();
 				System.out.println("Invalid URL please. Provide valid httpc get or httpc post URL");
 				continue;
 			}
@@ -176,11 +169,14 @@ public class HttpClient {
 	}
 
 	/**
-	 * This method will write response in specific file location which user has provided while sending the request
-	 * 
+	 * This method will write response in specific file location which user has
+	 * provided while sending the request
+	 *
 	 * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
-	 * @param reader response in bufferreader
-	 * @param statusCode response statusCode in String
+	 * @param reader
+	 *            response in bufferreader
+	 * @param statusCode
+	 *            response statusCode in String
 	 */
 	private static void writetoFile(BufferedReader reader, String statusCode) throws IOException {
 
@@ -224,10 +220,12 @@ public class HttpClient {
 
 	/**
 	 * This method will write response in Console
-	 * 
+	 *
 	 * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
-	 * @param reader response in bufferreader
-	 * @param statusCode response statusCode in String
+	 * @param reader
+	 *            response in bufferreader
+	 * @param statusCode
+	 *            response statusCode in String
 	 */
 	private static void printresult(BufferedReader reader, String statusCode) throws IOException {
 
@@ -245,22 +243,14 @@ public class HttpClient {
 
 			boolean isJson = false;
 			while ((line = reader.readLine()) != null) {
-				
-//				if (line.trim().equals(LEFT_BRACKET))
-//					isJson = true;
-//				if (isJson) {
-//					System.out.println(line);
-//					if (line.equals(RIGHT_BRACKET))
-//						break;
-//				}
-				
-				if(line.startsWith("Content-Length:")) {
+
+				if (line.trim().equals(LEFT_BRACKET))
 					isJson = true;
-				}
-				if(isJson && !line.startsWith("Content-Length:")) {
+				if (isJson) {
 					System.out.println(line);
+					if (line.equals(RIGHT_BRACKET))
+						break;
 				}
-				
 			}
 
 		}
@@ -268,15 +258,17 @@ public class HttpClient {
 	}
 
 	/**
-	 * This method will parse the user request URL and set different value in Request class based on different conditions
-	 * 
+	 * This method will parse the user request URL and set different value in
+	 * Request class based on different conditions
+	 *
 	 * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
-	 * @param dataList space separated request element
+	 * @param dataList
+	 *            space separated request element
 	 */
 	private static void parseInputRequest(List<String> dataList)
 			throws URISyntaxException, UnknownHostException, IOException {
-		
-		//Collecting user request elements 
+
+		// Collecting user request elements
 		for (int i = 0; i < dataList.size(); i++) {
 
 			if (dataList.get(i).equals("-v")) {
@@ -330,14 +322,14 @@ public class HttpClient {
 		PrintWriter writer = new PrintWriter(output);
 
 		if (path.length() == 0) {
-			writer.println(request.getRequestMethod().toUpperCase() + " / HTTP/1.1");
+			writer.println(request.getRequestMethod().toUpperCase() + " / HTTP/1.0");
 		} else {
-			writer.println(request.getRequestMethod().toUpperCase() + " " + path + " HTTP/1.1");
+			writer.println(request.getRequestMethod().toUpperCase() + " " + path + " HTTP/1.0");
 		}
 
 		writer.print("Host: " + hostName + NEW_LINE);
 
-		//for -d inline data
+		// for -d inline data
 		if (request.isInlineData()) {
 			if (request.getInlineData().contains("\'")) {
 
@@ -346,36 +338,21 @@ public class HttpClient {
 			}
 			writer.print("Content-Length: " + request.getInlineData().length() + NEW_LINE);
 
-		// -f for sending file data	
+			// -f for sending file data
 		} else if (request.isFilesend()) {
 
-			// File filetoSend = new File(request.getFileSendPath());
-			// BufferedReader bufferedReader = new BufferedReader(new FileReader(filetoSend));
-			// String string;
-			// while ((string = bufferedReader.readLine()) != null) {
-			// fileData.append(string);
-			// }
-			// writer.println("Content-Length: " + fileData.length() + NEW_LINE);
-
-			// bufferedReader.close();
-
-
-			byte[] bytearray = new byte[1024*16];
-			    InputStream in = HttpClient.class.getResourceAsStream(request.getFileSendPath());
-			   
-			        BufferedInputStream bis = new BufferedInputStream(in);
-
-			        int readLength = -1;
-			        while ((readLength = bis.read(bytearray)) > 0) {
-			            output.write(bytearray, 0, readLength);
-
-			        }
-			        bis.close();
-			        //output.close();
-
-
-
+			File filetoSend = new File(request.getFileSendPath());
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(filetoSend));
+			String string;
+			while ((string = bufferedReader.readLine()) != null) {
+				fileData.append(string);
 			}
+			writer.println("Content-Length: " + fileData.length() + NEW_LINE);
+
+			bufferedReader.close();
+
+		}
+
 		// -h for http header
 		if (request.isHttpHeader()) {
 			if (!headerLst.isEmpty()) {
@@ -390,8 +367,10 @@ public class HttpClient {
 		if (request.isInlineData()) {
 			writer.print(NEW_LINE);
 			writer.print(request.getInlineData());
+			writer.print(NEW_LINE);
 		} else if (request.isFilesend()) {
-		//	writer.print(fileData);
+			writer.print(NEW_LINE);
+			writer.print(fileData.toString());
 			writer.print(NEW_LINE);
 		} else {
 			writer.print(NEW_LINE);
