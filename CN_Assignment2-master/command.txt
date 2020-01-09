@@ -1,0 +1,82 @@
+Command to RUN :
+
+For GET request ====>>
+
+    httpc get -v http://localhost:8080/get?course=networking&assignment=1
+    
+
+    httpc get -h Content-Type:application/json http://localhost:8080/get?course=networking&assignment=1
+
+    httpc get -v -h Content-Type:application/json http://localhost:8080/get?course=networking&assignment=1
+
+For POST request ====>>
+    httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post
+    
+    httpc post -h Content-Type:application/json -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post
+
+httpc post -v -d '{"Assignment":1}' http://localhost:8080/post
+
+    httpc post -v -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post
+
+    httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post?course=networking&assignment=1
+
+    httpc post -v -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post?course=networking&assignment=1
+
+    httpc post -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post?course=networking&assignment=1 -o result.txt
+
+	httpc post -v -f file.json http://localhost:8080/post?course=networking&assignment=1
+
+GET request with REDIRECTION CODE (numbers starts with 3xx) ====>>
+    httpc get -v http://samples.openweathermap.org/data/2.5/weather?q=London,uk
+
+    httpc get -v http://samples.openweathermap.org/data/2.5/weather?q=London,uk -o result.txt 
+    
+    httpc post -v -h Content-Type:application/json -f file.json http://localhost:8080/post
+    
+    httpc post -v -h Content-Type:application/json -f test.txt http://localhost:8080/post  
+    httpc GET -v http://localhost:1234/get?course=networking&assignment=1
+      
+    httpc get -h Content-Type:application/json http://localhost:8080/get?course=networking&assignment=1  
+    httpc post -v -h Content-Type:application/json -d '{"Assignment":1}' http://localhost:8080/post?  
+    
+    
+====> Run the server file
+    httpfs -v -p 8080 -d /Users/ashish.patel/Downloads/Lab Assignments/Assignment2/HttpFtpClientServer
+    
+    httpfs -v -p 8080 -d /src
+    
+    httpfs -v -p 8080
+    
+====> Run FTPClient (httpfs option)
+    httpfs get/ http://localhost:8080/get?    
+    httpfs get/  -h Content-Type:json http://localhost:8080/get?
+    httpfs get/  -h Content-Type:html http://localhost:8080/get?
+    httpfs get/  -h Content-Type:txt http://localhost:8080/get? 
+    httpfs get/test.txt http://localhost:8080/get?   
+    httpfs get/test99.txt http://localhost:8080/get?   
+      
+    httpfs post/test.txt http://localhost:8080/post? -d '{"Assignment":1}'   
+        
+    httpfs post/123.txt http://localhost:8080/post? -d ceedede   
+    httpfs post/123.txt -h overwrite:true http://localhost:8080/post? -d ceededebefbehfbehfbehfbehfbe    
+    httpfs post/123.txt -h overwrite:false http://localhost:8080/post? -d 123
+    
+====> Run FTPClient (httpc option)
+	httpc http://localhost:8080/get/
+	httpc http://localhost:8080/get/test.txt
+	httpc http://localhost:8080/post/test.txt -d '{"Assignment":1}'  
+	httpc http://localhost:8080/get/test99.txt
+	httpc -h overwrite:true http://localhost:8080/post/test.txt -d '{"test":123}'
+	httpc http://localhost:8080/post/123.txt -d ceedede   
+    httpc -h overwrite:true http://localhost:8080/post/123.txt -d ceededebefbehfbehfbehfbehfbe    
+    httpc -h overwrite:false http://localhost:8080/post/123.txt -d 123
+	
+	
+====>Content-Type
+	httpc -h Content-Type:json http://localhost:8080/get/
+    httpc -h Content-Type:html http://localhost:8080/get/
+    httpc -h Content-Type:txt http://localhost:8080/get/
+    
+====>Content-Disposition
+     httpc -h Content-Disposition:attachment http://localhost:8080/get/test.txt
+  
